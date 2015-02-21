@@ -1,5 +1,9 @@
 <?hh // strict
 
+class SimpleClass {
+  public function iAmNotAGlobalFunction(): void { }
+}
+
 class GenericClass<Tk, Tv> {
 }
 
@@ -10,6 +14,9 @@ class :foo {
 }
 
 class :foo:bar {
+}
+
+function simple_function(): void {
 }
 
 function generic_function<Tk, Tv>(): void {
