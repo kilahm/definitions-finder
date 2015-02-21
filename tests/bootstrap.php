@@ -1,3 +1,4 @@
 <?php
 
-require_once(__DIR__.'/../src/DefinitionFinder.php');
+require_once(__DIR__.'/../src/DefinitionToken.php');
+require_once(__DIR__.'/../src/FileParser.php');
