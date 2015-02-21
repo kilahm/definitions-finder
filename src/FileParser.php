@@ -1,10 +1,10 @@
-<?hh
+<?hh // strict
 
 namespace FredEmmott\DefinitionFinder;
 
 class FileParser {
   private ?string $data;
-  private array $tokens = [];
+  private array<mixed> $tokens = [];
   private string $namespace = '';
   private Vector<string> $classes = Vector { };
   private Vector<string> $interfaces = Vector { };
