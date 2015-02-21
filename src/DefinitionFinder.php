@@ -142,12 +142,15 @@ class FileParser {
         break;
       case DefinitionToken::CLASS_DEF:
         $this->classes[] = $fqn;
+        $this->skipToAndConsumeBlock();
         break;
       case DefinitionToken::INTERFACE_DEF:
         $this->interfaces[] = $fqn;
+        $this->skipToAndConsumeBlock();
         break;
       case DefinitionToken::TRAIT_DEF:
         $this->traits[] = $fqn;
+        $this->skipToAndConsumeBlock();
         break;
       case DefinitionToken::ENUM_DEF:
         $this->enums[] = $fqn;
@@ -189,5 +192,21 @@ class FileParser {
       "\\",
       $name."\\",
     );
+
+  }
+
+  private function skipToAndConsumeBlock(): void {
+    $nesting = 0;
+    while ($this->tokens) {
+      $next = array_shift($this->tokens);
+      if ($next === '{') {
+        ++$nesting;
+      } else if ($next === '}') {
+        --$nesting;
+        if ($nesting === 0) {
+          return;
+        }
+      }
+    }
   }
 }
