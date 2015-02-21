@@ -1,11 +1,12 @@
-<?hh // strict
+<?hh
 
 class SimpleClass {
   public function iAmNotAGlobalFunction(): void { }
 }
 
 class GenericClass<Tk, Tv> {
-  const int FOO = 42;
+  const NOT_A_GLOBAL_CONSTANT = 42;
+  const int ALSO_NOT_A_GLOBAL_CONSTANT = 42;
 }
 
 abstract final class AbstractFinalClass {
@@ -27,7 +28,8 @@ function simple_function(): void {
 function generic_function<Tk, Tv>(): void {
 }
 
-const int MY_CONST = 123;
+const MY_CONST = 456;
+const int MY_TYPED_CONST = 123;
 
 type MyType = int;
 type MyGenericType<T> = string;
