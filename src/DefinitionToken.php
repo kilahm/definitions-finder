@@ -1,4 +1,6 @@
-<?hh
+<?hh // strict
+
+namespace FredEmmott\DefinitionFinder;
 
 enum DefinitionToken: int {
   NAMESPACE_DEF = T_NAMESPACE;
