@@ -7,7 +7,7 @@ abstract class AbstractPHPTest extends PHPUnit_Framework_TestCase {
   abstract protected function getPrefix(): string;
 
   protected function setUp(): void {
-    $this->parser = \FredEmmott\DefinitionFinder\FileParser::fromFile(
+    $this->parser = \FredEmmott\DefinitionFinder\FileParser::FromFile(
       __DIR__.'/data/'.$this->getFilename(),
     );
   }
