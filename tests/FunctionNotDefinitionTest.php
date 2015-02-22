@@ -58,4 +58,9 @@ EOF
     );
     $this->assertEquals(Vector { 'foo' }, $p->getFunctions());
   }
+
+  public function testAsRVal(): void {
+    $p = FileParser::FromData('<?php $f = function(){};');
+    $this->assertEmpty($p->getFunctions());
+  }
 }
