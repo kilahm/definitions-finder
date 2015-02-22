@@ -158,12 +158,15 @@ class FileParser {
         break;
       case DefinitionToken::TYPE_DEF:
         $this->types[] = $fqn;
+        $this->consumeStatement();
         break;
       case DefinitionToken::NEWTYPE_DEF:
         $this->newtypes[] = $fqn;
+        $this->consumeStatement();
         break;
       case DefinitionToken::FUNCTION_DEF:
         $this->functions[] = $fqn;
+        $this->consumeStatement();
         break;
       case DefinitionToken::CONST_DEF:
         $this->consumeConstantDefinition($name);
@@ -286,6 +289,20 @@ class FileParser {
         if ($nesting === 0) {
           return;
         }
+      }
+    }
+  }
+
+  private function consumeStatement(): void {
+    while ($this->tokens) {
+      $next = array_shift($this->tokens);
+      if ($next === ';') {
+        return;
+      }
+      if ($next === '{') {
+        array_unshift($this->tokens, $next);
+        $this->skipToAndConsumeBlock();
+        return;
       }
     }
   }
