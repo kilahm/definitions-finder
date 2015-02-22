@@ -16,7 +16,7 @@ final class TreeWalkerTest extends PHPUnit_Framework_TestCase {
       $w->getClasses()->keys(),
     );
     $this->assertContains(
-      'FredEmmott\DefinitionFinder\DefinitionToken',
+      'FredEmmott\DefinitionFinder\DefinitionType',
       $w->getEnums()->keys(),
     );
     $this->assertContains(
