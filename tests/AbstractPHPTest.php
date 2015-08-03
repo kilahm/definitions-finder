@@ -19,7 +19,7 @@ abstract class AbstractPHPTest extends PHPUnit_Framework_TestCase {
         $this->getPrefix().'SimpleAbstractClass',
         $this->getPrefix().'SimpleFinalClass',
       },
-      $this->parser?->getClasses(),
+      $this->parser?->getClassNames(),
     );
   }
 

@@ -16,7 +16,7 @@ final class MultiNamespacePHPTest extends PHPUnit_Framework_TestCase {
         'Herp\\Derp',
         'EmptyNamespace',
       },
-      $this->parser?->getClasses(),
+      $this->parser?->getClassNames(),
     );
   }
 }
