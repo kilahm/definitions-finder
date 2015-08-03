@@ -65,7 +65,7 @@ abstract class AbstractHackTest extends PHPUnit_Framework_TestCase {
         $this->getPrefix().'generic_function',
         $this->getPrefix().'byref_return_function',
       },
-      $this->parser?->getFunctions(),
+      $this->parser?->getFunctionNames(),
     );
   }
 
