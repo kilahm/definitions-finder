@@ -65,4 +65,8 @@ final class ScannedClassBuilder extends ScannedBaseBuilder {
       nullthrows($this->attributes),
     );
   }
+
+  public function getType(): ClassDefinitionType {
+    return $this->type;
+  }
 }
