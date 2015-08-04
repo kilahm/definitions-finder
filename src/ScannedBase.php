@@ -30,5 +30,3 @@ abstract class ScannedBase {
 final class ScannedClass extends ScannedBase {
 }
 
-final class ScannedFunction extends ScannedBase {
-}
