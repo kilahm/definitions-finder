@@ -32,7 +32,7 @@ abstract class AbstractHackTest extends PHPUnit_Framework_TestCase {
         $this->getPrefix().'MyType',
         $this->getPrefix().'MyGenericType',
       },
-      $this->parser?->getTypes(),
+      $this->parser?->getTypeNames(),
     );
   }
 
@@ -42,7 +42,7 @@ abstract class AbstractHackTest extends PHPUnit_Framework_TestCase {
         $this->getPrefix().'MyNewtype',
         $this->getPrefix().'MyGenericNewtype',
       },
-      $this->parser?->getNewtypes(),
+      $this->parser?->getNewtypeNames(),
     );
   }
 
@@ -51,7 +51,7 @@ abstract class AbstractHackTest extends PHPUnit_Framework_TestCase {
       Vector {
         $this->getPrefix().'MyEnum',
       },
-      $this->parser?->getEnums(),
+      $this->parser?->getEnumNames(),
     );
   }
 
