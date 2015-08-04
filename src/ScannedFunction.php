@@ -8,7 +8,9 @@ final class ScannedFunction extends ScannedBase {
   }
 }
 
-final class ScannedFunctionBuilder extends ScannedBaseBuilder {
+final class ScannedFunctionBuilder
+  extends ScannedSingleTypeBuilder<ScannedFunction> {
+
   private ?bool $byRefReturn;
 
 

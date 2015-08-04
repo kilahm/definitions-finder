@@ -24,7 +24,7 @@ class ScannedConstant extends ScannedBase {
   }
 }
 
-class ScannedConstantBuilder extends ScannedBaseBuilder {
+class ScannedConstantBuilder extends ScannedSingleTypeBuilder<ScannedConstant> {
   public function __construct(
     string $name,
     private mixed $value,
