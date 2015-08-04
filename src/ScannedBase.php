@@ -6,6 +6,7 @@ type SourcePosition = shape(
   'filename' => string,
 );
 
+<<__ConsistentConstruct>>
 abstract class ScannedBase {
   public function __construct(
     private SourcePosition $position,
@@ -13,6 +14,8 @@ abstract class ScannedBase {
     private Map<string, Vector<mixed>> $attributes,
   ) {
   }
+
+  abstract public static function getType(): DefinitionType;
 
   public function getFileName(): string {
     return $this->position['filename'];
@@ -27,11 +30,28 @@ abstract class ScannedBase {
   }
 }
 
-final class ScannedClass extends ScannedBase {
-}
+abstract class ScannedBaseBuilder {
+  protected ?string $namespace;
+  protected ?SourcePosition $position;
+  protected ?Map<string, Vector<mixed>> $attributes;
 
-final class ScannedInterface extends ScannedBase {
-}
+  public function __construct(protected string $name) {
+  }
 
-final class ScannedTrait extends ScannedBase {
+  public function setNamespace(string $name): this {
+    $this->namespace = $name;
+    return $this;
+  }
+
+  public function setPosition(SourcePosition $pos): this {
+    $this->position = $pos;
+    return $this;
+  }
+
+  public function setAttributes(
+    Map<string, Vector<mixed>> $v
+  ): this {
+    $this->attributes = $v;
+    return $this;
+  }
 }
