@@ -8,8 +8,8 @@ class FileParser {
   private Map<string,Vector<mixed>> $attributes = Map { };
 
   // Results
-  private Vector<ScannedClass> $classes = Vector { };
   private Vector<ScannedFunction> $functions = Vector { };
+  private Vector<ScannedBasicClass> $classes = Vector { };
   private Vector<ScannedInterface> $interfaces = Vector { };
   private Vector<ScannedTrait> $traits = Vector { };
 
@@ -46,7 +46,7 @@ class FileParser {
   ///// Accessors /////
 
   public function getFilename(): string { return $this->file; }
-  public function getClasses(): \ConstVector<ScannedClass> {
+  public function getClasses(): \ConstVector<ScannedBasicClass> {
     return $this->classes;
   }
   public function getInterfaces(): \ConstVector<ScannedInterface> {
@@ -297,7 +297,7 @@ class FileParser {
 
     switch ($def_type) {
       case ClassDefinitionType::CLASS_DEF:
-        $this->classes[] = $builder->build(ScannedClass::class);
+        $this->classes[] = $builder->build(ScannedBasicClass::class);
         break;
       case ClassDefinitionType::INTERFACE_DEF:
         $this->interfaces[] = $builder->build(ScannedInterface::class);

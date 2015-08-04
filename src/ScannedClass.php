@@ -3,7 +3,7 @@
 namespace FredEmmott\DefinitionFinder;
 
 <<__ConsistentConstruct>>
-class ScannedClass extends ScannedBase {
+abstract class ScannedClass extends ScannedBase {
 
   public function __construct(
     private SourcePosition $position,
@@ -13,16 +13,18 @@ class ScannedClass extends ScannedBase {
     parent::__construct($position, $name, $attributes);
   }
 
-  public static function getType(): DefinitionType {
-    return DefinitionType::CLASS_DEF;
-  }
-
   public function isInterface(): bool {
     return static::getType() === DefinitionType::INTERFACE_DEF;
   }
 
   public function isTrait(): bool {
     return static::getType() === DefinitionType::TRAIT_DEF;
+  }
+}
+
+final class ScannedBasicClass extends ScannedClass {
+  public static function getType(): DefinitionType {
+    return DefinitionType::CLASS_DEF;
   }
 }
 
