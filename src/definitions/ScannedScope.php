@@ -19,6 +19,7 @@ class ScannedScope extends ScannedBase {
       $position,
       '__SCOPE__',
       /* attributes = */ Map { },
+      /* docblock = */ null,
     );
   }
 

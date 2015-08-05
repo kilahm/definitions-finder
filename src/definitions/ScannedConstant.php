@@ -7,11 +7,13 @@ class ScannedConstant extends ScannedBase {
     SourcePosition $position,
     string $name,
     private mixed $value,
+    ?string $docblock,
   ) {
     parent::__construct(
       $position,
       $name,
       /* attributes = */ Map { },
+      $docblock,
     );
   }
 

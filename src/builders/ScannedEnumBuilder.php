@@ -8,6 +8,7 @@ class ScannedEnumBuilder extends ScannedSingleTypeBuilder<ScannedEnum> {
       nullthrows($this->position),
       nullthrows($this->namespace).$this->name,
       /* attributes = */ Map { },
+      $this->docblock,
     );
   }
 }
