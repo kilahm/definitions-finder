@@ -2,8 +2,6 @@
 
 namespace FredEmmott\DefinitionFinder;
 
-type AttributeMap = Map<string, Vector<mixed>>;
-
 class ScopeConsumer extends Consumer {
   protected function getEmptyBuilder(): ScannedScopeBuilder{
     return new ScannedScopeBuilder();
