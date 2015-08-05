@@ -3,10 +3,6 @@
 namespace FredEmmott\DefinitionFinder;
 
 class ScopeConsumer extends Consumer {
-  protected function getEmptyBuilder(): ScannedScopeBuilder{
-    return new ScannedScopeBuilder();
-  }
-
   public function getBuilder(): ScannedScopeBuilder {
     $builder = (new ScannedScopeBuilder())->setNamespace('');
     $attrs = Map { };
