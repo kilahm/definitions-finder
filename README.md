@@ -16,8 +16,6 @@ Add `fredemmott/definition-finder` to your Composer `requires` section
 Status
 ------
 
-[![Build Status](https://travis-ci.org/fredemmott/definitions-finder.svg?branch=master)](https://travis-ci.org/fredemmott/definitions-finder)
-
 Work in progress.
 
 **API IS NOT YET STABLE**
@@ -25,4 +23,4 @@ Work in progress.
 License
 -------
 
-This project is licensed under the MIT license; see the LICENSE file.
+This project is licensed under the BSD license; see the LICENSE file.
