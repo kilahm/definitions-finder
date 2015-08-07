@@ -7,6 +7,7 @@ final class ScannedFunctionBuilder
 
   private ?bool $byRefReturn;
   private ?\ConstVector<ScannedGeneric> $generics = null;
+  private ?ScannedTypehint $returnType;
 
 
   public function setByRefReturn(bool $v): this {
@@ -19,6 +20,11 @@ final class ScannedFunctionBuilder
     return $this;
   }
 
+  public function setReturnType(?ScannedTypehint $type): this {
+    $this->returnType = $type;
+    return $this;
+  }
+
   public function build(): ScannedFunction {
     return new ScannedFunction(
       nullthrows($this->position),
@@ -26,6 +32,7 @@ final class ScannedFunctionBuilder
       nullthrows($this->attributes),
       $this->docblock,
       nullthrows($this->generics),
+      $this->returnType,
     );
   }
 }

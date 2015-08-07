@@ -44,6 +44,7 @@ final class ScannedClassBuilder extends ScannedBaseBuilder {
         $f->getAttributes(),
         $f->getDocComment(),
         $f->getGenerics(),
+        $f->getReturnType(),
       )
     );
 
