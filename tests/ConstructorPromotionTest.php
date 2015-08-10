@@ -44,7 +44,7 @@ class Foo {
     );
     $this->assertEquals(
       Vector { 'string', 'mixed', 'int' },
-      $params->map($x ==> $x->getTypehint()?->getTypehint()),
+      $params->map($x ==> $x->getTypehint()?->getTypeName()),
     );
   }
 
