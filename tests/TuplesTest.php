@@ -84,7 +84,7 @@ function foo((string, string) $bar) {};
       return null;
     }
 
-    $generics = $typehint->getGenerics()->map(
+    $generics = $typehint->getGenericTypes()->map(
       $x ==> $this->sthToArray($x),
     )->toArray();
 
