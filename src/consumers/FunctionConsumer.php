@@ -67,6 +67,7 @@ class FunctionConsumer extends Consumer {
     $visibility = null;
     $param_type = null;
     $byref = false;
+    $variadic = false;
     while ($tq->haveTokens()) {
       list($t, $ttype) = $tq->shift();
 
@@ -78,6 +79,10 @@ class FunctionConsumer extends Consumer {
         $byref = true;
         continue;
       }
+      if ($ttype === T_ELLIPSIS) {
+        $variadic = true;
+        continue;
+      }
 
       if ($ttype === T_VARIABLE) {
         $this->consumeDefaultValue();
@@ -85,6 +90,7 @@ class FunctionConsumer extends Consumer {
         $param_type = null;
         $visibility = null;
         $byref = false;
+        $variadic = false;
         continue;
       }
 
