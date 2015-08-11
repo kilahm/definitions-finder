@@ -17,8 +17,8 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
     $params = $function->getParameters();
 
     $this->assertSame(2, count($params));
-    $this->assertSame('$bar', $params[0]->getName());
-    $this->assertSame('$baz', $params[1]->getName());
+    $this->assertSame('bar', $params[0]->getName());
+    $this->assertSame('baz', $params[1]->getName());
     $this->assertNull($params[0]->getTypehint());
     $this->assertNull($params[1]->getTypehint());
   }
@@ -32,7 +32,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
     $params = $function->getParameters();
     $this->assertSame(1, count($params));
     $param = $params[0];
-    $this->assertSame('$bar', $param->getName());
+    $this->assertSame('bar', $param->getName());
     $typehint = $param->getTypehint();
     $this->assertSame('string', $typehint?->getTypeName());
     $this->assertEmpty($typehint?->getGenericTypes());
@@ -47,7 +47,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
     $params = $function->getParameters();
     $this->assertSame(1, count($params));
     $param = $params[0];
-    $this->assertSame('$bar', $param->getName());
+    $this->assertSame('bar', $param->getName());
     $typehint = $param->getTypehint();
     $this->assertSame('Vector', $typehint?->getTypeName());
     $this->assertEquals(
@@ -67,7 +67,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
 
     $params = $function->getParameters();
     $this->assertEquals(
-      Vector { '$bar' },
+      Vector { 'bar' },
       $function->getParameters()->map($x ==> $x->getName()),
     );
     $this->assertEquals(
@@ -84,7 +84,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
 
     $params = $function->getParameters();
     $this->assertEquals(
-      Vector { '$bar' },
+      Vector { 'bar' },
       $function->getParameters()->map($x ==> $x->getName()),
     );
     $this->assertEquals(
@@ -101,7 +101,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
 
     $params = $function->getParameters();
     $this->assertEquals(
-      Vector { '$bar' },
+      Vector { 'bar' },
       $function->getParameters()->map($x ==> $x->getName()),
     );
     $this->assertEquals(
@@ -117,7 +117,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
 
     $params = $function->getParameters();
     $this->assertEquals(
-      Vector { '$bar' },
+      Vector { 'bar' },
       $function->getParameters()->map($x ==> $x->getName()),
     );
     $this->assertEquals(
@@ -133,7 +133,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
 
     $params = $function->getParameters();
     $this->assertEquals(
-      Vector { '$bar' },
+      Vector { 'bar' },
       $function->getParameters()->map($x ==> $x->getName()),
     );
     $this->assertEquals(
@@ -149,7 +149,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
 
     $params = $function->getParameters();
     $this->assertEquals(
-      Vector { '$bar' },
+      Vector { 'bar' },
       $function->getParameters()->map($x ==> $x->getName()),
     );
     $this->markTestIncomplete('byref status not exposed');
@@ -162,7 +162,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
 
     $params = $function->getParameters();
     $this->assertEquals(
-      Vector { '$bar' },
+      Vector { 'bar' },
       $function->getParameters()->map($x ==> $x->getName()),
     );
     $this->assertEquals(
@@ -189,7 +189,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
     $function = $parser->getFunction('foo');
 
     $this->assertEquals(
-      Vector { '$bar' },
+      Vector { 'bar' },
       $function->getParameters()->map($x ==> $x->getName()),
     );
   }
@@ -201,7 +201,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
     $function = $parser->getFunction('foo');
 
     $this->assertEquals(
-      Vector { '$bar' },
+      Vector { 'bar' },
       $function->getParameters()->map($x ==> $x->getName()),
     );
 
