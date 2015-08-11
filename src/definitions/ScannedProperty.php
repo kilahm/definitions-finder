@@ -1,0 +1,41 @@
+<?hh // strict
+
+namespace FredEmmott\DefinitionFinder;
+
+class ScannedProperty extends ScannedBase {
+  public function __construct(
+    SourcePosition $position,
+    string $name,
+    Map<string, Vector<mixed>> $attributes,
+    ?string $docComment,
+    private ?ScannedTypehint $typehint,
+    private VisibilityToken $visibility,
+  ) {
+    parent::__construct(
+      $position,
+      $name,
+      $attributes,
+      $docComment,
+    );
+  }
+  
+  public static function getType(): ?DefinitionType {
+    return null;
+  }
+
+  public function getTypehint(): ?ScannedTypehint {
+    return $this->typehint;
+  }
+
+  public function isPublic(): bool {
+    return $this->visibility === T_PUBLIC;
+  }
+
+  public function isProtected(): bool {
+    return $this->visibility === T_PROTECTED;
+  }
+
+  public function isPrivate(): bool {
+    return $this->visibility === T_PRIVATE;
+  }
+}

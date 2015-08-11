@@ -43,6 +43,7 @@ final class ScannedClassBuilder extends ScannedBaseBuilder {
       nullthrows($this->attributes),
       $this->docblock,
       $scope->getMethods(),
+      $scope->getProperties(),
     );
   }
 
