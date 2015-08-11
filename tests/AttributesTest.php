@@ -64,6 +64,13 @@ class ClassAttributesTest extends \PHPUnit_Framework_TestCase {
     );
   }
 
+  public function testFunctionContainingBitShift(): void {
+    $data = '<?hh function foo() { 1 << 3; }';
+    $parser = FileParser::FromData($data);
+    $fun = $parser->getFunction('foo');
+    $this->assertEmpty($fun->getAttributes());
+  }
+
   public function testFunctionAttrsDontPolluteClass(): void {
     $class = $this->findClass('ClassAfterFunction');
     $this->assertEquals(
@@ -87,4 +94,5 @@ class ClassAttributesTest extends \PHPUnit_Framework_TestCase {
   private function findClass(string $name): ScannedClass {
     return $this->findScanned($this->classes, $name);
   }
+
 }
