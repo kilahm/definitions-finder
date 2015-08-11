@@ -12,6 +12,7 @@ final class ScannedMethod extends ScannedFunctionAbstract {
     ?ScannedTypehint $returnType,
     \ConstVector<ScannedParameter> $parameters,
     private VisibilityToken $visibility,
+    private bool $static,
   ) {
     parent::__construct(
       $position,
@@ -34,5 +35,9 @@ final class ScannedMethod extends ScannedFunctionAbstract {
 
   public function isPrivate(): bool {
     return $this->visibility === T_PRIVATE;
+  }
+
+  public function isStatic(): bool {
+    return $this->static;
   }
 }

@@ -69,6 +69,10 @@ class ClassContentsTest extends \PHPUnit_Framework_TestCase {
   }
   
   public function testMethodsAreStatic(): void {
-    $this->markTestIncomplete();
+    $this->assertEquals(
+      Vector { false, false, false, true },
+      $this->class?->getMethods()?->map($x ==> $x->isStatic()),
+      'isPublic',
+    );
   }
 }
