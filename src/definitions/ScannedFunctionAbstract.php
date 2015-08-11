@@ -1,5 +1,4 @@
-<?hh // strict
-
+<?hh // strict 
 namespace FredEmmott\DefinitionFinder;
 
 abstract class ScannedFunctionAbstract extends ScannedBase {

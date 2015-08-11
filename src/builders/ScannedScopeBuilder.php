@@ -9,6 +9,7 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
 
   private Vector<ScannedClassBuilder> $classBuilders = Vector { };
   private Vector<ScannedFunctionBuilder> $functionBuilders = Vector { };
+  private Vector<ScannedMethodBuilder> $methodBuilders = Vector { };
   private Vector<ScannedConstantBuilder> $constantBuilders = Vector { };
   private Vector<ScannedEnumBuilder> $enumBuilders = Vector { };
   private Vector<ScannedTypeBuilder> $typeBuilders = Vector { };
@@ -22,6 +23,10 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
 
   public function addFunction(ScannedFunctionBuilder $b): void {
     $this->functionBuilders[] = $b;
+  }
+
+  public function addMethod(ScannedMethodBuilder $b): void {
+    $this->methodBuilders[] = $b;
   }
 
   public function addConstant(ScannedConstantBuilder $b): void {
@@ -67,6 +72,7 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
     }
 
     $functions = $this->buildAll($this->functionBuilders);
+    $methods = $this->buildAll($this->methodBuilders);
     $constants = $this->buildAll($this->constantBuilders);
     $enums = $this->buildAll($this->enumBuilders);
     $types = $this->buildAll($this->typeBuilders);
@@ -79,6 +85,7 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
       $interfaces->addAll($scope->getInterfaces());
       $traits->addAll($scope->getTraits());
       $functions->addAll($scope->getFunctions());
+      $methods->addAll($scope->getMethods());
       $constants->addAll($scope->getConstants());
       $enums->addAll($scope->getEnums());
       $types->addAll($scope->getTypes());
@@ -91,6 +98,7 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
       $interfaces,
       $traits,
       $functions,
+      $methods,
       $constants,
       $enums,
       $types,
