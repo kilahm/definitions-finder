@@ -9,6 +9,9 @@ abstract class Consumer {
   }
 
   protected function consumeWhitespace(): void {
+    if ($this->tq->isEmpty()) {
+      return;
+    }
     list($t, $ttype) = $this->tq->shift();
     if ($ttype === T_WHITESPACE) {
       return;
