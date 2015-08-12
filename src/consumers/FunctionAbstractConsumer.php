@@ -5,6 +5,8 @@ namespace FredEmmott\DefinitionFinder;
 abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
   extends Consumer {
 
+  private ?string $name;
+
   abstract protected static function ConstructBuilder(
     string $name,
   ): ScannedFunctionAbstractBuilder<T>;
@@ -37,6 +39,7 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
       'Expected function name at line %d',
       $tq->getLine(),
     );
+    $this->name = $t;
     $name = $t;
 
     $builder = static::ConstructBuilder($name)
@@ -111,6 +114,7 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
           $byref,
           $variadic,
           $default,
+          $visibility,
         );
         $param_type = null;
         $visibility = null;
@@ -123,12 +127,14 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
         continue;
       }
 
-      if (
-        $ttype === T_PRIVATE
-        || $ttype === T_PUBLIC
-        || $ttype === T_PROTECTED
-      ) {
-        $visibility = $ttype;
+      if (VisibilityToken::isValid($ttype)) {
+        invariant(
+          $this->name === '__construct',
+          'Saw %s for a non-constructor function parameter at line %d',
+          token_name($ttype),
+          $tq->getLine(),
+        );
+        $visibility = VisibilityToken::assert($ttype);
         continue;
       }
       
