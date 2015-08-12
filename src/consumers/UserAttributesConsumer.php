@@ -58,6 +58,7 @@ final class UserAttributesConsumer extends Consumer {
           'Expected attribute value to be followed by , or ) at line %d',
           $this->tq->getLine(),
         );
+        $this->consumeWhitespace();
       }
 
       list($t, $ttype) = $this->tq->shift();
