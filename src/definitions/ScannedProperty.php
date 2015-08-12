@@ -10,6 +10,7 @@ class ScannedProperty extends ScannedBase {
     ?string $docComment,
     private ?ScannedTypehint $typehint,
     private VisibilityToken $visibility,
+    private bool $isStatic,
   ) {
     parent::__construct(
       $position,
@@ -37,5 +38,9 @@ class ScannedProperty extends ScannedBase {
 
   public function isPrivate(): bool {
     return $this->visibility === T_PRIVATE;
+  }
+
+  public function isStatic(): bool {
+    return $this->isStatic;
   }
 }

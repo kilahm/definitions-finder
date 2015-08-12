@@ -26,6 +26,7 @@ class ScopeConsumer extends Consumer {
     $scope_depth = 1;
     $visibility = null;
     $static = false;
+    $property_type = null;
     while ($tq->haveTokens() && $scope_depth > 0) {
       list ($token, $ttype) = $tq->shift();
       if ($token === '(') {
@@ -66,6 +67,12 @@ class ScopeConsumer extends Consumer {
         $static = true;
       }
 
+      // I hate you, PHP.
+      if ($ttype === T_STRING && strtolower($token) === 'define') {
+        $builder->addConstant((new DefineConsumer($tq))->getBuilder());
+        continue;
+      }
+
       if (VisibilityToken::isValid($ttype)) {
         invariant(
           $this->scopeType === ScopeType::CLASS_SCOPE,
@@ -75,33 +82,36 @@ class ScopeConsumer extends Consumer {
         );
         $visibility = VisibilityToken::assert($ttype);
 
-        // Do we have a property?
-        $this->consumeWhitespace();
-        list($t, $ttype) = $tq->peek();
+        continue;
+      }
+
+      if ($ttype === T_STRING) {
+        $tq->unshift($token, $ttype);
+        $property_type = (new TypehintConsumer($tq))->getTypehint();
+        continue;
+      }
+
+      if ($ttype === T_VARIABLE) {
+        $name = substr($token, 1); // remove prefixed '$'
+        if ($visibility === null) {
+          $visibility = VisibilityToken::T_PUBLIC;
+        }
+        $builder->addProperty(
+          (new ScannedPropertyBuilder($name))
+          ->setAttributes($attrs)
+          ->setDocComment($docblock)
+          ->setVisibility($visibility)
+          ->setTypehint($property_type)
+          ->setIsStatic($static)
+        );
+
+        $attrs = Map { };
+        $docblock = null;
+        $visibility = null;
+        $static = false;
         $property_type = null;
-        if ($ttype === T_STRING) {
-          $property_type = ((new TypehintConsumer($tq))->getTypehint());
-          $this->consumeWhitespace();
-        }
-        list($t, $ttype) = $tq->peek();
-        if ($ttype === T_VARIABLE) {
-          $tq->shift();
-          $name = substr($t, 1); // remove prefixed '$'
-          $builder->addProperty(
-            (new ScannedPropertyBuilder($name))
-            ->setAttributes($attrs)
-            ->setDocComment($docblock)
-            ->setVisibility($visibility)
-            ->setTypehint($property_type)
-          );
 
-          $attrs = Map { };
-          $docblock = null;
-          $visibility = null;
-          $static = false;
-
-          $this->consumeStatement();
-        }
+        $this->consumeStatement();
         continue;
       }
 
@@ -118,12 +128,7 @@ class ScopeConsumer extends Consumer {
         $docblock = null;
         $visibility = null;
         $static = false;
-        continue;
-      }
-
-      // I hate you, PHP.
-      if ($ttype === T_STRING && strtolower($token) === 'define') {
-        $builder->addConstant((new DefineConsumer($tq))->getBuilder());
+        $property_type = null;
         continue;
       }
     }
