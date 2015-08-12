@@ -14,6 +14,7 @@ class ConstructorPromotionTest extends \PHPUnit_Framework_TestCase {
 class Foo {
   public function __construct(
     public string $foo,
+    <<HerpDerp>>
     private mixed $bar,
     protected int $baz,
   ) {}
@@ -66,6 +67,15 @@ class Foo {
       $props?->map($x ==> $x->getTypehint()?->getTypeName()),
     );
 
-    $this->markTestIncomplete('attributes, doc comment');
+    $this->assertEquals(
+      Vector {
+        Map {},
+        Map { 'HerpDerp' => Vector {} },
+        Map {},
+      },
+      $props?->map($x ==> $x->getAttributes()),
+    );
+
+    $this->markTestIncomplete('doc comment');
   }
 }
