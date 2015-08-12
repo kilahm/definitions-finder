@@ -42,6 +42,7 @@ final class DefineConsumer extends Consumer {
     return new ScannedConstantBuilder(
       $name,
       $value,
+      /* typehint = */ null,
     );
   }
 }

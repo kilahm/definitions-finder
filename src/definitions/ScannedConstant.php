@@ -6,8 +6,9 @@ class ScannedConstant extends ScannedBase {
   public function __construct(
     SourcePosition $position,
     string $name,
-    private mixed $value,
     ?string $docblock,
+    private mixed $value,
+    private ?ScannedTypehint $typehint,
   ) {
     parent::__construct(
       $position,
@@ -23,5 +24,9 @@ class ScannedConstant extends ScannedBase {
 
   public function getValue(): mixed {
     return $this->value;
+  }
+
+  public function getTypehint(): ?ScannedTypehint {
+    return $this->typehint;
   }
 }
