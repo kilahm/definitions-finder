@@ -23,8 +23,11 @@ final class UserAttributesConsumer extends Consumer {
       // this attribute has values
       invariant(
         $t === '(',
-        'Expected attribute name to be followed by >>, (, or , at line %d',
+        "Expected attribute name to be followed by >>, (, or , at line %d; ".
+        "- got '%s' (%d)",
         $this->tq->getLine(),
+        $t,
+        $ttype,
       );
 
       while (true) {
@@ -38,7 +41,8 @@ final class UserAttributesConsumer extends Consumer {
             break;
           default:
             invariant_violation(
-              "Invalid attribute value token type: %d",
+              "Invalid attribute value token type at line %d: %d",
+              $this->tq->getLine(),
               $ttype
             );
         }
@@ -59,7 +63,8 @@ final class UserAttributesConsumer extends Consumer {
       }
       invariant(
         $t === ',',
-        'Expected attribute value list to be followed by >> or ,',
+        'Expected attribute value list to be followed by >> or , at line %d',
+        $this->tq->getLine(),
       );
     }
     invariant_violation(
