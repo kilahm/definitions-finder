@@ -4,6 +4,7 @@ namespace FredEmmott\DefinitionFinder\Test;
 
 use FredEmmott\DefinitionFinder\FileParser;
 use FredEmmott\DefinitionFinder\ScannedBase;
+use FredEmmott\DefinitionFinder\ScannedFunction;
 
 class DocCommentTest extends \PHPUnit_Framework_TestCase {
   private Map<string, ScannedBase> $defs = Map { };
@@ -72,6 +73,20 @@ class DocCommentTest extends \PHPUnit_Framework_TestCase {
     $this->assertSame(
       '/** enum doc */',
       $def->getDocComment(),
+    );
+  }
+
+  public function testParameterWithDoc(): void {
+    $fun = $this->getDef('param_with_doc_comment');
+    assert($fun instanceof ScannedFunction);
+    $params = $fun->getParameters();
+    $this->assertEquals(
+      Vector { 'commented', 'uncommented' },
+      $params->map($x ==> $x->getName()),
+    );
+    $this->assertEquals(
+      Vector { '/** param doc */', null },
+      $params->map($x ==> $x->getDocComment())
     );
   }
 

@@ -16,6 +16,7 @@ class Foo {
     public string $foo,
     <<HerpDerp>>
     private mixed $bar,
+    /** baz comment */
     protected int $baz,
   ) {}
 }
@@ -76,6 +77,9 @@ class Foo {
       $props?->map($x ==> $x->getAttributes()),
     );
 
-    $this->markTestIncomplete('doc comment');
+    $this->assertEquals(
+      Vector { null, null, '/** baz comment */' },
+      $props?->map($x ==> $x->getDocComment()),
+    );
   }
 }

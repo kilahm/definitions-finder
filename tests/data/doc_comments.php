@@ -20,3 +20,5 @@ newtype NewtypeWithDocComment = string;
 
 /** enum doc */
 enum EnumWithDocComment: string {}
+
+function param_with_doc_comment(/** param doc */ $commented, $uncommented) {}
