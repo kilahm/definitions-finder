@@ -50,9 +50,8 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
     if ($ttype === T_TYPELIST_LT) {
       $generics = $this->consumeGenerics();
     }
-    $builder
-      ->setGenerics($generics)
-      ->setParameters($this->consumeParameterList());
+    $builder->setGenerics($generics);
+    $this->consumeParameterList($builder);
 
     $this->consumeWhitespace();
     list($t, $ttype) = $tq->peek();
@@ -64,7 +63,9 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
     return $builder;
   }
 
-  private function consumeParameterList(): \ConstVector<ScannedParameter> {
+  private function consumeParameterList(
+    ScannedFunctionAbstractBuilder<T> $builder,
+  ): void {
     $this->consumeWhitespace();
     $tq = $this->tq;
     list($t, $ttype) = $tq->shift();
@@ -76,8 +77,7 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
       $this->tq->getLine(),
     );
 
-    $params = Vector { };
-
+    $have_variadic = false;
     $visibility = null;
     $param_type = null;
     $byref = false;
@@ -95,26 +95,31 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
       }
       if ($ttype === T_ELLIPSIS) {
         $variadic = true;
+        invariant(
+          !$have_variadic,
+          'multiple variadics at line %d',
+          $tq->getLine(),
+        );
+        $have_variadic = true;
         continue;
       }
 
       if ($ttype === T_VARIABLE) {
         $default = $this->consumeDefaultValue();
         $name = substr($t, 1); // remove '$'
-        if (!$variadic) {
-          invariant(
-            count($params->filter($param ==> $param->isVariadic())) === 0,
-            'non-variadic parameter after variadic at line %d',
-            $tq->getLine(),
-          );
-        }
-        $params[] = new ScannedParameter(
-          $name,
-          $param_type,
-          $byref,
-          $variadic,
-          $default,
-          $visibility,
+        invariant(
+          $variadic || !$have_variadic,  
+          'non-variadic parameter after variadic at line %d',
+          $tq->getLine(),
+        );
+        $builder->addParameter(
+          (new ScannedParameterBuilder($name))
+          ->setTypehint($param_type)
+          ->setIsPassedByReference($byref)
+          ->setIsVariadic($variadic)
+          ->setDefaultString($default)
+          ->setVisibility($visibility)
+          ->setAttributes(Map { })
         );
         $param_type = null;
         $visibility = null;
@@ -147,7 +152,6 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
       $tq->unshift($t, $ttype);
       $param_type = (new TypehintConsumer($this->tq))->getTypehint();
     }
-    return $params;
   }
 
   private function consumeGenerics(): \ConstVector<ScannedGeneric> {

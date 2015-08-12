@@ -13,7 +13,7 @@ final class ScannedFunctionBuilder
       $this->docblock,
       nullthrows($this->generics),
       $this->returnType,
-      nullthrows($this->parameters),
+      $this->buildParameters(),
     );
   }
 }
