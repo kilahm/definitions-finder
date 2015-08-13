@@ -13,6 +13,7 @@ abstract class ScannedClass extends ScannedBase {
     private \ConstVector<ScannedMethod> $methods,
     private \ConstVector<ScannedProperty> $properties,
     private \ConstVector<ScannedConstant> $constants,
+    private \ConstVector<ScannedGeneric> $generics,
   ) {
     parent::__construct($position, $name, $attributes, $docblock);
   }
@@ -35,5 +36,9 @@ abstract class ScannedClass extends ScannedBase {
 
   public function getConstants(): \ConstVector<ScannedConstant> {
     return $this->constants;
+  }
+
+  public function getGenericTypes(): \ConstVector<ScannedGeneric> {
+    return $this->generics;
   }
 }
