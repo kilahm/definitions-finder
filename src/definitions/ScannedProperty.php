@@ -2,7 +2,9 @@
 
 namespace FredEmmott\DefinitionFinder;
 
-class ScannedProperty extends ScannedBase {
+class ScannedProperty
+  extends ScannedBase
+  implements HasScannedVisibility {
   public function __construct(
     SourcePosition $position,
     string $name,

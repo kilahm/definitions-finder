@@ -2,7 +2,9 @@
 
 namespace FredEmmott\DefinitionFinder;
 
-final class ScannedMethod extends ScannedFunctionAbstract {
+final class ScannedMethod
+  extends ScannedFunctionAbstract
+  implements HasScannedVisibility {
   public function __construct(
     SourcePosition $position,
     string $name,

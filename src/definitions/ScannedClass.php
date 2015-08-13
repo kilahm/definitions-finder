@@ -3,7 +3,9 @@
 namespace FredEmmott\DefinitionFinder;
 
 <<__ConsistentConstruct>>
-abstract class ScannedClass extends ScannedBase {
+abstract class ScannedClass
+  extends ScannedBase
+  implements HasScannedGenerics {
 
   public function __construct(
     SourcePosition $position,
