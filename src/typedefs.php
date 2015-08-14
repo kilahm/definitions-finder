@@ -27,3 +27,12 @@ enum RelationshipToken: string {
   SUBTYPE = 'as';
   SUPERTYPE = 'super';
 }
+
+const int T_SELECT = 422;
+const int T_ON = 415;
+
+enum StringishTokens: int {
+  T_STRING = T_STRING;
+  T_SELECT = T_SELECT;
+  T_ON = T_ON;
+}

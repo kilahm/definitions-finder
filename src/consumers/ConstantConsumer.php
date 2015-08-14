@@ -21,7 +21,7 @@ final class ConstantConsumer extends Consumer {
       if ($next_type === T_WHITESPACE) {
         continue;
       }
-      if ($next_type === T_STRING) {
+      if (StringishTokens::isValid($next_type)) {
         $this->consumeWhitespace();
         list($_, $nnt) = $this->tq->peek();
         if ($nnt === T_STRING) {
