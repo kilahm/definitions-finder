@@ -15,6 +15,7 @@ class GenericsConsumer extends Consumer {
     $name = null;
     $constraint = null;
     $variance = VarianceToken::INVARIANT;
+    $relationship = null;
 
     while ($tq->haveTokens()) {
       list($t, $ttype) = $tq->shift();
@@ -30,7 +31,12 @@ class GenericsConsumer extends Consumer {
 
       if ($ttype === T_TYPELIST_GT) {
         if ($name !== null) {
-          $ret[] = new ScannedGeneric($name, $constraint, $variance);
+          $ret[] = new ScannedGeneric(
+            $name,
+            $constraint,
+            $variance,
+            $relationship,
+          );
         }
         return $ret;
       }
@@ -45,10 +51,12 @@ class GenericsConsumer extends Consumer {
           nullthrows($name),
           $constraint,
           $variance,
+          $relationship,
         );
         $name = null;
         $constraint = null;
         $variance = VarianceToken::INVARIANT;
+        $relationship = null;
         continue;
       }
 
@@ -62,7 +70,13 @@ class GenericsConsumer extends Consumer {
         continue;
       }
 
-      if ($ttype === T_AS || $ttype === T_SUPER) {
+      if ($ttype === T_AS) {
+        $relationship = RelationshipToken::SUBTYPE;
+        continue;
+      }
+
+      if ($ttype === T_SUPER) {
+        $relationship = RelationshipToken::SUPERTYPE;
         continue;
       }
 
