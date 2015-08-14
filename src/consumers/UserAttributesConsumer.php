@@ -53,8 +53,10 @@ final class UserAttributesConsumer extends Consumer {
               $ttype
             );
         }
+        $this->consumeWhitespace();
         list($t, $_) = $this->tq->shift();
         if ($t === '.') {
+          $this->consumeWhitespace();
           continue;
         }
 
