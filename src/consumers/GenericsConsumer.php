@@ -51,7 +51,11 @@ class GenericsConsumer extends Consumer {
       }
 
       if ($name === null) {
-        invariant($ttype === T_STRING, 'expected type variable name');
+        invariant(
+          $ttype === T_STRING,
+          'expected type variable name at line %d',
+          $tq->getLine(),
+        );
         $name = $t;
         continue;
       }
@@ -60,7 +64,11 @@ class GenericsConsumer extends Consumer {
         continue;
       }
 
-      invariant($ttype === T_STRING, 'expected type constraint');
+      invariant(
+        $ttype === T_STRING,
+        'expected type constraint at line %d',
+        $tq->getLine(),
+      );
       $constraint = $t;
     }
     invariant_violation('never reached end of generics definition');
