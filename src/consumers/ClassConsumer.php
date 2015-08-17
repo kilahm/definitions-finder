@@ -52,16 +52,16 @@ final class ClassConsumer extends Consumer {
       }
 
       if ($ttype === T_EXTENDS) {
+        $classes = $this->consumeClassList();
         if ($this->type === ClassDefinitionType::INTERFACE_DEF) {
-          $builder->setInterfaceNames($this->consumeClassList());
+          $builder->setInterfaces($classes);
         } else {
-          $parents = $this->consumeClassList();
           invariant(
-            count($parents) === 1,
+            count($classes) === 1,
             'only interfaces can have more than 1 parent at line %d',
             $this->tq->getLine(),
           );
-          $builder->setParentClassName($parents[0]);
+          $builder->setParentClassInfo($classes[0]);
         }
         continue;
       }
@@ -72,7 +72,7 @@ final class ClassConsumer extends Consumer {
            'interfaces can not implement interfaces at line %d',
            $this->tq->getLine(),
         );
-        $builder->setInterfaceNames($this->consumeClassList());
+        $builder->setInterfaces($this->consumeClassList());
       }
     }
 
@@ -83,7 +83,7 @@ final class ClassConsumer extends Consumer {
       );
   }
 
-  private function consumeClassList(): \ConstVector<string> {
+  private function consumeClassList(): \ConstVector<ScannedTypehint> {
     $classes = Vector { };
     while ($this->tq->haveTokens()) {
       $this->consumeWhitespace();
@@ -97,9 +97,7 @@ final class ClassConsumer extends Consumer {
         break;
       }
 
-      $classes[] = (new TypehintConsumer($this->tq))
-        ->getTypehint()
-        ->getTypeName();
+      $classes[] = (new TypehintConsumer($this->tq))->getTypehint();
     }
     return $classes;
   }
