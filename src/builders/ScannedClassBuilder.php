@@ -4,7 +4,9 @@ namespace FredEmmott\DefinitionFinder;
 
 final class ScannedClassBuilder extends ScannedBaseBuilder {
   private ?ScannedScopeBuilder $scopeBuilder;
-  protected ?\ConstVector<ScannedGeneric> $generics = null;
+  protected \ConstVector<ScannedGeneric> $generics = Vector { };
+  private \ConstVector<string> $interfaces = Vector { };
+  private ?string $parent = null;
 
   public function setGenericTypes(
     \ConstVector<ScannedGeneric> $generics,
@@ -23,6 +25,16 @@ final class ScannedClassBuilder extends ScannedBaseBuilder {
   public function setContents(ScannedScopeBuilder $scope): this {
     invariant($this->scopeBuilder === null, 'class already has a scope');
     $this->scopeBuilder = $scope;
+    return $this;
+  }
+
+  public function setParentClassName(string $parent): this {
+    $this->parent = $parent;
+    return $this;
+  }
+
+  public function setInterfaceNames(\ConstVector<string> $interfaces): this {
+    $this->interfaces = $interfaces;
     return $this;
   }
 
@@ -77,7 +89,9 @@ final class ScannedClassBuilder extends ScannedBaseBuilder {
       $methods,
       $properties,
       $scope->getConstants(),
-      nullthrows($this->generics),
+      $this->generics,
+      $this->parent,
+      $this->interfaces,
     );
   }
 

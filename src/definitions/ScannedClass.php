@@ -16,6 +16,8 @@ abstract class ScannedClass
     private \ConstVector<ScannedProperty> $properties,
     private \ConstVector<ScannedConstant> $constants,
     private \ConstVector<ScannedGeneric> $generics,
+    private ?string $parent,
+    private \ConstVector<string> $interfaces,
   ) {
     parent::__construct($position, $name, $attributes, $docblock);
   }
@@ -42,5 +44,13 @@ abstract class ScannedClass
 
   public function getGenericTypes(): \ConstVector<ScannedGeneric> {
     return $this->generics;
+  }
+
+  public function getInterfaceNames(): \ConstVector<string> {
+    return $this->interfaces;
+  }
+
+  public function getParentClassName(): ?string {
+    return $this->parent;
   }
 }
