@@ -17,6 +17,7 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
   private Vector<ScannedNewtypeBuilder> $newtypeBuilders = Vector { };
 
   private Vector<ScannedNamespaceBuilder> $namespaceBuilders = Vector { };
+  private Vector<ScannedScope> $subscopes = Vector { };
 
   public function addProperty(ScannedPropertyBuilder $b): void {
     $this->propertyBuilders[] = $b;
@@ -54,6 +55,10 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
     $this->namespaceBuilders[] = $b;
   }
 
+  public function addSubScope(ScannedScope $s): void {
+    $this->subscopes[] = $s;
+  }
+
   public function build(): ScannedScope {
     $ns = nullthrows($this->namespace);
     $pos = nullthrows($this->position);
@@ -86,6 +91,7 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
 
     $namespaces = $this->buildAll($this->namespaceBuilders);
     $scopes = $namespaces->map($ns ==> $ns->getContents());
+    $scopes->addAll($this->subscopes);
     foreach ($scopes as $scope) {
       $classes->addAll($scope->getClasses());
       $interfaces->addAll($scope->getInterfaces());
