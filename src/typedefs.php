@@ -7,6 +7,7 @@ namespace FredEmmott\DefinitionFinder;
 
 type SourcePosition = shape(
   'filename' => string,
+  'line' =>  ?int,
 );
 
 type AttributeMap = Map<string, Vector<mixed>>;
