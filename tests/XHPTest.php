@@ -1,0 +1,44 @@
+<?hh // strict
+
+namespace FredEmmott\DefinitionFinder\Test;
+
+use FredEmmott\DefinitionFinder\FileParser;
+use FredEmmott\DefinitionFinder\ScannedClass;
+
+class XHPTest extends \PHPUnit_Framework_TestCase {
+  public function testXHPRootClass(): void {
+    $data = '<?hh class :foo:bar {}';
+
+    $parser = FileParser::FromData($data);
+    $this->assertContains(
+      'xhp_foo__bar',
+      $parser->getClassNames(),
+    );
+  }
+
+  public function testXHPClasssWithParent(): void {
+    $data = '<?hh class :foo:bar extends :herp:derp {}';
+
+    $parser = FileParser::FromData($data);
+    $this->assertContains(
+      'xhp_foo__bar',
+      $parser->getClassNames(),
+    );
+
+    $this->assertSame(
+      'xhp_herp__derp',
+      $parser->getClass('xhp_foo__bar')->getParentClassName(),
+    );
+  }
+
+  public function testXHPEnumAttributeParses(): void {
+    // XHP Attributes are not reported, but shouldn't cause parse errors
+    $data = '<?hh class :foo:bar { attribute enum { "herp", "derp" } myattr @required; }';
+
+    $parser = FileParser::FromData($data);
+    $this->assertContains(
+      'xhp_foo__bar',
+      $parser->getClassNames(),
+    );
+  }
+}
