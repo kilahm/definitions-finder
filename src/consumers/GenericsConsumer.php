@@ -33,7 +33,7 @@ class GenericsConsumer extends Consumer {
         if ($name !== null) {
           $ret[] = new ScannedGeneric(
             $name,
-            $constraint,
+            $this->unaliasName($constraint),
             $variance,
             $relationship,
           );
@@ -49,7 +49,7 @@ class GenericsConsumer extends Consumer {
       if ($t === ',') {
         $ret[] = new ScannedGeneric(
           nullthrows($name),
-          $constraint,
+          $this->unaliasName($constraint),
           $variance,
           $relationship,
         );

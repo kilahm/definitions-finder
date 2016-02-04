@@ -26,7 +26,7 @@ final class ConstantConsumer extends Consumer {
         list($_, $nnt) = $this->tq->peek();
         if ($nnt === T_STRING) {
           $this->tq->unshift($next, $next_type);
-          $typehint = (new TypehintConsumer($this->tq))->getTypehint();
+          $typehint = (new TypehintConsumer($this->tq, $this->aliases))->getTypehint();
           continue;
         } else {
           $name = $next;
