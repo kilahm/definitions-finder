@@ -69,9 +69,9 @@ final class ClassConsumer extends Consumer {
 
       if ($ttype === T_IMPLEMENTS) {
         invariant(
-           $this->type !== ClassDefinitionType::INTERFACE_DEF,
-           'interfaces can not implement interfaces at line %d',
-           $this->tq->getLine(),
+          $this->type !== ClassDefinitionType::INTERFACE_DEF,
+          'interfaces can not implement interfaces at line %d',
+          $this->tq->getLine(),
         );
         $builder->setInterfaces($this->consumeClassList());
       }
@@ -98,7 +98,8 @@ final class ClassConsumer extends Consumer {
         break;
       }
 
-      $classes[] = (new TypehintConsumer($this->tq, $this->aliases))->getTypehint();
+      $classes[] = (new TypehintConsumer($this->tq, $this->aliases))
+        ->getTypehint();
     }
     return $classes;
   }

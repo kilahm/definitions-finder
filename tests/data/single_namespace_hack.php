@@ -59,15 +59,21 @@ function aliased(Aliased $aliased): Aliased {
   return $aliased;
 }
 
-function aliased_with_namespace(AliasedWithNamespace $aliased): AliasedWithNamespace {
+function aliased_with_namespace(
+    AliasedWithNamespace $aliased,
+): AliasedWithNamespace {
   return $aliased;
 }
 
-function aliased_with_nested_namespace(AliasedWithNestedNamespace $aliased): AliasedWithNestedNamespace {
+function aliased_with_nested_namespace(
+    AliasedWithNestedNamespace $aliased,
+): AliasedWithNestedNamespace {
   return $aliased;
 }
 
-function aliased_namespace(AliasedNamespace\Foo $aliased): AliasedNamespace\Foo {
+function aliased_namespace(
+    AliasedNamespace\Foo $aliased,
+): AliasedNamespace\Foo {
   return $aliased;
 }
 

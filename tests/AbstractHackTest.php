@@ -112,7 +112,9 @@ abstract class AbstractHackTest extends PHPUnit_Framework_TestCase {
       $class->getGenericTypes()->map($x ==> $x->getConstraintTypeName()),
     );
 
-    $class = $this->parser?->getClass($this->getPrefix().'GenericAliasedConstraintClass');
+    $class = $this->parser?->getClass(
+      $this->getPrefix().'GenericAliasedConstraintClass'
+    );
     assert($class !== null);
 
     $this->assertEquals(
@@ -181,11 +183,22 @@ abstract class AbstractHackTest extends PHPUnit_Framework_TestCase {
   public function testAliasedTypehints(): void {
     $data = Map {
       'Foo' => $this->getFunction('aliased'),
-      'SingleNamespace\Foo' => $this->getFunction('aliased_with_namespace'),
-      'Namespaces\AreNested\Now\Foo' => $this->getFunction('aliased_with_nested_namespace'),
-      'Namespaces\AreNested\Now\Foo' => $this->getFunction('aliased_namespace'),
-      'Namespaces\AreNested\Now\Bar' => $this->getFunction('aliased_no_as'),
-      'Namespaces\AreNested\Now\Bar' => $this->getClassMethod('SimpleClass', 'aliasInClassScope'),
+        'SingleNamespace\Foo' => $this->getFunction(
+          'aliased_with_namespace'
+        ),
+      'Namespaces\AreNested\Now\Foo' => $this->getFunction(
+        'aliased_with_nested_namespace'
+      ),
+      'Namespaces\AreNested\Now\Foo' => $this->getFunction(
+        'aliased_namespace'
+      ),
+      'Namespaces\AreNested\Now\Bar' => $this->getFunction(
+        'aliased_no_as'
+      ),
+      'Namespaces\AreNested\Now\Bar' => $this->getClassMethod(
+        'SimpleClass',
+        'aliasInClassScope'
+      ),
     };
     foreach($data as $typeName => $fun) {
       $returnType = $fun->getReturnType();
@@ -207,13 +220,21 @@ abstract class AbstractHackTest extends PHPUnit_Framework_TestCase {
     return $class;
   }
 
-  private function getClassMethod(string $className, string $methodName): ScannedMethod {
+  private function getClassMethod(
+    string $className,
+    string $methodName
+  ): ScannedMethod {
     $method = $this
       ->getClass($className)
       ->getMethods()
       ->filter($m ==> $m->getName() === $methodName)
       ->get(0);
-    invariant($method !== null, 'Could not find method %s in class %s', $methodName, $className);
+    invariant(
+      $method !== null,
+      'Could not find method %s in class %s',
+      $methodName,
+      $className
+    );
     return $method;
   }
 }

@@ -66,7 +66,7 @@ abstract class Consumer {
 
   protected function unaliasName(?string $name): ?string {
 
-    if($name === null) {
+    if ($name === null) {
       return $name;
     }
 
@@ -74,7 +74,7 @@ abstract class Consumer {
     $base = $parts[0];
     $realBase = $this->aliases->get($base);
 
-    if($realBase === null) {
+    if ($realBase === null) {
       return $name;
     }
 
