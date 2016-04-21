@@ -43,6 +43,14 @@ class AttributesTest extends \PHPUnit_Framework_TestCase {
     );
   }
 
+  public function testWithFormattedAttributes(): void {
+    $class = $this->findClass('ClassWithFormattedAttributes');
+    $this->assertEquals(
+      Map { 'Foo' => Vector { }, 'Bar' => Vector {'herp', 'derp'} },
+      $class->getAttributes(),
+    );
+  }
+
   public function testWithSingleIntAttribute(): void {
     $class = $this->findClass('ClassWithIntAttribute');
     $this->assertEquals(
@@ -107,7 +115,7 @@ class AttributesTest extends \PHPUnit_Framework_TestCase {
 
   private function findScanned<T as ScannedBase>(
     \ConstVector<T> $container,
-    string $name, 
+    string $name,
   ): T {
     foreach ($container as $scanned) {
       if ($scanned->getName() === "FredEmmott\\DefinitionFinder\\Test\\".$name) {

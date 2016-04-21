@@ -22,3 +22,13 @@ function function_after_classes(): void {}
 
 <<ClassFoo>>
 class ClassAfterFunction {}
+
+<<
+Foo,
+Bar
+(
+    'herp',
+    'derp'
+)
+>>
+class ClassWithFormattedAttributes {}
