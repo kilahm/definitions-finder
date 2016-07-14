@@ -219,4 +219,75 @@ class ClassContentsTest extends \PHPUnit_Framework_TestCase {
       $props->map($x ==> $x->isStatic()),
     );
   }
+
+  public function testTypeConstant(): void {
+    $data = '<?hh class Foo { const type BAR = int; }';
+    $parser = FileParser::FromData($data);
+    $constants = $parser->getClass('Foo')->getTypeConstants();
+    $this->assertSame(1, $constants->count());
+    $constant = $constants->at(0);
+
+    $this->assertSame('BAR', $constant->getName());
+    $this->assertFalse($constant->isAbstract());
+    $this->assertSame('int', $constant->getValue()?->getTypeText());
+  }
+
+  public function testAbstractTypeConstant(): void {
+    $data = '<?hh abstract class Foo { abstract const type BAR; }';
+    $parser = FileParser::FromData($data);
+    $constants = $parser->getClass('Foo')->getTypeConstants();
+    $this->assertSame(1, $constants->count());
+    $constant = $constants->at(0);
+
+    $this->assertSame('BAR', $constant->getName());
+    $this->assertTrue($constant->isAbstract());
+    $this->assertNull($constant->getValue());
+  }
+
+  public function testConstrainedAbstractTypeConstant(): void {
+    $data = '<?hh abstract class Foo { abstract const type BAR as Bar; }';
+    $parser = FileParser::FromData($data);
+    $constants = $parser->getClass('Foo')->getTypeConstants();
+    $this->assertSame(1, $constants->count());
+    $constant = $constants->at(0);
+
+    $this->assertSame('BAR', $constant->getName());
+    $this->assertTrue($constant->isAbstract());
+    $this->assertSame('Bar', $constant->getValue()?->getTypeText());
+  }
+
+  public function testTypeConstantAsProperty(): void {
+    $data = '<?hh class Foo { public this::FOO $foo; }';
+    $parser = FileParser::FromData($data);
+    $props = $parser->getClass('Foo')->getProperties();
+    $this->assertSame(1, $props->count());
+    $prop = $props->at(0);
+
+    $this->assertSame('this::FOO', $prop->getTypehint()?->getTypeText());
+    $this->assertSame('foo', $prop->getName());
+  }
+
+  public function testTypeconstantAsReturnType(): void {
+    $data = '<?hh class Foo { public function bar(): this::FOO {} }';
+    $parser = FileParser::FromData($data);
+    $methods = $parser->getClass('Foo')->getMethods();
+    $this->assertSame(1, $methods->count());
+    $method = $methods->at(0);
+
+    $this->assertSame('this::FOO', $method->getReturnType()?->getTypeText());
+  }
+
+  public function testTypeconstantAsParameterType(): void {
+    $data = '<?hh class Foo { public function bar(this::FOO $foo): void {} }';
+    $parser = FileParser::FromData($data);
+    $methods = $parser->getClass('Foo')->getMethods();
+    $this->assertSame(1, $methods->count());
+    $method = $methods->at(0);
+    $params = $method->getParameters();
+    $this->assertSame(1, $params->count());
+    $param = $params->at(0);
+
+    $this->assertSame('this::FOO', $param->getTypehint()?->getTypeText());
+    $this->assertSame('foo', $param->getName());
+  }
 }

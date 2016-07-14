@@ -31,7 +31,9 @@ class ScopeConsumer extends Consumer {
     $scope_depth = 1;
     $visibility = null;
     $static = false;
+    $abstract = false;
     $property_type = null;
+
     while ($tq->haveTokens() && $scope_depth > 0) {
       list ($token, $ttype) = $tq->shift();
       if ($token === '(') {
@@ -71,6 +73,10 @@ class ScopeConsumer extends Consumer {
 
       if ($ttype === T_STATIC) {
         $static = true;
+      }
+
+      if ($ttype === T_ABSTRACT) {
+        $abstract = true;
       }
 
       if ($ttype === T_XHP_ATTRIBUTE) {
@@ -153,12 +159,16 @@ class ScopeConsumer extends Consumer {
           $docblock,
           $visibility,
           $static,
+          $abstract,
         );
+
         $attrs = Map { };
         $docblock = null;
         $visibility = null;
         $static = false;
         $property_type = null;
+        $abstract = false;
+
         continue;
       }
     }
@@ -173,6 +183,7 @@ class ScopeConsumer extends Consumer {
     ?string $docblock,
     ?VisibilityToken $visibility,
     bool $static,
+    bool $abstract,
    ): void {
     $this->consumeWhitespace();
 
@@ -231,6 +242,19 @@ class ScopeConsumer extends Consumer {
         }
         return;
       case DefinitionType::CONST_DEF:
+        list($next, $next_token) = $this->tq->peek();
+        if ($next_token === DefinitionType::TYPE_DEF) {
+          $builder->addTypeConstant(
+            (new TypeConstantConsumer(
+              $this->tq,
+              $this->scopeAliases,
+              $abstract
+            ))
+            ->getBuilder()
+            ->setDocComment($docblock)
+          );
+          return;
+        }
         $builder->addConstant(
           (new ConstantConsumer($this->tq, $this->scopeAliases))
           ->getBuilder()
