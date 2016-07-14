@@ -34,6 +34,7 @@ class ScopeConsumer extends Consumer {
     $abstractness = null;
     $finality = null;
     $property_type = null;
+
     while ($tq->haveTokens() && $scope_depth > 0) {
       list ($token, $ttype) = $tq->shift();
       if ($token === '(') {
@@ -81,6 +82,10 @@ class ScopeConsumer extends Consumer {
 
       if ($ttype === T_FINAL) {
         $finality = FinalityToken::IS_FINAL;
+      }
+
+      if ($ttype === T_ABSTRACT) {
+        $abstract = true;
       }
 
       if ($ttype === T_XHP_ATTRIBUTE) {
@@ -170,6 +175,7 @@ class ScopeConsumer extends Consumer {
           $abstractness,
           $finality,
         );
+
         $attrs = Map { };
         $docblock = null;
         $visibility = null;
@@ -270,6 +276,22 @@ class ScopeConsumer extends Consumer {
         }
         return;
       case DefinitionType::CONST_DEF:
+        list($next, $next_token) = $this->tq->peek();
+        if ($next_token === DefinitionType::TYPE_DEF) {
+          if ($abstractness === null) {
+            $abstractness = AbstractnessToken::NOT_ABSTRACT;
+          }
+          $builder->addTypeConstant(
+            (new TypeConstantConsumer(
+              $this->tq,
+              $this->scopeAliases,
+              $abstractness,
+            ))
+            ->getBuilder()
+            ->setDocComment($docblock)
+          );
+          return;
+        }
         $builder->addConstant(
           (new ConstantConsumer($this->tq, $this->scopeAliases))
           ->getBuilder()
