@@ -290,4 +290,74 @@ class ClassContentsTest extends \PHPUnit_Framework_TestCase {
     $this->assertSame('this::FOO', $param->getTypehint()?->getTypeText());
     $this->assertSame('foo', $param->getName());
   }
+
+  public static function namespacedReturns(): array<shape(
+    'namespace' => string,
+    'return type text' => string,
+    'expected return type text' => string,
+  )> {
+    return [
+      shape(
+        'namespace' => '',
+        'return type text' => 'this::FOO',
+        'expected return type text' => 'this::FOO',
+      ),
+      shape(
+        'namespace' => 'Bar',
+        'return type text' => 'this::FOO',
+        'expected return type text' => 'this::FOO',
+      ),
+      shape(
+        'namespace' => '',
+        'return type text' => 'Bar::FOO',
+        'expected return type text' => 'Bar::FOO',
+      ),
+      shape(
+        'namespace' => 'NS',
+        'return type text' => 'Bar::FOO',
+        'expected return type text' => 'NS\Bar::FOO',
+      ),
+      shape(
+        'namespace' => 'NS',
+        'return type text' => '\Bar::FOO',
+        'expected return type text' => 'Bar::FOO',
+      ),
+      shape(
+        'namespace' => 'NS',
+        'return type text' => 'Nested\Bar::FOO',
+        'expected return type text' => 'NS\Nested\Bar::FOO',
+      ),
+      shape(
+        'namespace' => 'NS',
+        'return type text' => '\Nested\Bar::FOO',
+        'expected return type text' => 'Nested\Bar::FOO',
+      ),
+    ];
+  }
+
+  /**
+   * @dataProvider namespacedReturns
+   */
+  public function testNamespacedTypeconstantAsParameterType(
+    string $namespace,
+    string $returnText,
+    string $expectedTypehintText,
+  ): void {
+    $data = sprintf(
+    '<?hh %s class Foo { public function bar(): %s {} }',
+      $namespace === '' ? '' : "namespace $namespace;",
+      $returnText
+    );
+    $className = $namespace . '\Foo'
+      |> ltrim($$, '\\');
+    $parser = FileParser::FromData($data);
+    $methods = $parser->getClass($className)->getMethods();
+    $this->assertSame(1, $methods->count());
+    $method = $methods->at(0);
+
+    $this->assertSame(
+      $expectedTypehintText,
+      $method->getReturnType()?->getTypeText()
+    );
+  }
 }
