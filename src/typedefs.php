@@ -49,6 +49,7 @@ const int T_SHAPE = 402;
 const int T_ON = 415;
 const int T_DICT = 442;
 const int T_VEC = 443;
+const int T_KEYSET = 444;
 
 enum StringishTokens: int {
   T_STRING = T_STRING;
@@ -56,4 +57,5 @@ enum StringishTokens: int {
   T_ON = T_ON;
   T_DICT = T_DICT;
   T_VEC = T_VEC;
+  T_KEYSET = T_KEYSET;
 }

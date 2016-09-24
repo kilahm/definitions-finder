@@ -22,6 +22,7 @@ class NamingTest extends \PHPUnit_Framework_TestCase {
     return [
       [ 'dict' ], // HHVM >= 3.13
       [ 'vec' ], // HHVM >= 3.14
+      [ 'keyset' ], // HHVM >= 3.16
     ];
   }
 
