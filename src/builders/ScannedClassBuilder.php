@@ -100,6 +100,7 @@ final class ScannedClassBuilder extends ScannedBaseBuilder {
       $this->generics,
       $this->parent,
       $this->interfaces,
+      $scope->getUsedTraits(),
       nullthrows($this->abstractness),
       nullthrows($this->finality),
     );

@@ -10,6 +10,7 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
   private Vector<ScannedClassBuilder> $classBuilders = Vector { };
   private Vector<ScannedFunctionBuilder> $functionBuilders = Vector { };
   private Vector<ScannedMethodBuilder> $methodBuilders = Vector { };
+  private Vector<ScannedTypehint> $usedTraits = Vector { };
   private Vector<ScannedPropertyBuilder> $propertyBuilders = Vector { };
   private Vector<ScannedConstantBuilder> $constantBuilders = Vector { };
   private Vector<ScannedEnumBuilder> $enumBuilders = Vector { };
@@ -21,6 +22,10 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
 
   public function addProperty(ScannedPropertyBuilder $b): void {
     $this->propertyBuilders[] = $b;
+  }
+
+  public function addUsedTrait(ScannedTypehint $trait): void {
+    $this->usedTraits[] = $trait;
   }
 
   public function addClass(ScannedClassBuilder $b): void {
@@ -111,6 +116,7 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
       $traits,
       $functions,
       $methods,
+      $this->usedTraits,
       $properties,
       $constants,
       $enums,
