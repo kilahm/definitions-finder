@@ -5,7 +5,8 @@ namespace FredEmmott\DefinitionFinder;
 abstract class Consumer {
   public function __construct(
     protected TokenQueue $tq,
-    protected \ConstMap<string, string> $aliases
+    protected ?string $namespace,
+    protected \ConstMap<string, string> $aliases,
   ) {
   }
 

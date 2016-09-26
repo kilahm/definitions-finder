@@ -15,10 +15,11 @@ class ScopeConsumer extends Consumer {
   public function __construct(
     TokenQueue $tq,
     private ScopeType $scopeType,
+    ?string $namespace,
     \ConstMap<string, string> $aliases,
   ) {
     $this->scopeAliases = new Map($aliases);
-    parent::__construct($tq, $aliases);
+    parent::__construct($tq, $namespace, $aliases);
   }
 
   public function getBuilder(): ScannedScopeBuilder {
@@ -61,8 +62,11 @@ class ScopeConsumer extends Consumer {
       }
 
       if ($ttype === T_SL && $scope_depth === 1 && $parens_depth === 0) {
-        $attrs = (new UserAttributesConsumer($tq, $this->scopeAliases))
-          ->getUserAttributes();
+        $attrs = (new UserAttributesConsumer(
+          $tq,
+          $this->namespace,
+          $this->scopeAliases,
+        ))->getUserAttributes();
         continue;
       }
 
@@ -95,8 +99,11 @@ class ScopeConsumer extends Consumer {
 
       // I hate you, PHP.
       if ($ttype === T_STRING && strtolower($token) === 'define') {
-        $sub_builder = (new DefineConsumer($tq, $this->scopeAliases))
-          ->getBuilder();
+        $sub_builder = (new DefineConsumer(
+          $tq,
+          $this->namespace,
+          $this->scopeAliases,
+        ))->getBuilder();
         // I hate you more, PHP. $sub_builder is null in case we've not
         // actually got a constant: define($variable, ...);
         if ($sub_builder) {
@@ -126,8 +133,11 @@ class ScopeConsumer extends Consumer {
 
       if ($ttype === T_STRING) {
         $tq->unshift($token, $ttype);
-        $property_type = (new TypehintConsumer($tq, $this->scopeAliases))
-          ->getTypehint();
+        $property_type = (new TypehintConsumer(
+          $tq,
+          $this->namespace,
+          $this->scopeAliases,
+        ))->getTypehint();
         continue;
       }
 
@@ -199,7 +209,11 @@ class ScopeConsumer extends Consumer {
     switch ($def_type) {
       case DefinitionType::NAMESPACE_DEF:
         $builder->addNamespace(
-          (new NamespaceConsumer($this->tq, $this->scopeAliases))->getBuilder()
+          (new NamespaceConsumer(
+            $this->tq,
+            /* ns = */ null,
+            $this->scopeAliases,
+          ))->getBuilder()
         );
         return;
       case DefinitionType::CLASS_DEF:
@@ -215,6 +229,7 @@ class ScopeConsumer extends Consumer {
           (new ClassConsumer(
             ClassDefinitionType::assert($def_type),
             $this->tq,
+            $this->namespace,
             $this->scopeAliases
           ))
             ->getBuilder()
@@ -226,11 +241,17 @@ class ScopeConsumer extends Consumer {
         return;
       case DefinitionType::FUNCTION_DEF:
         if ($this->scopeType === ScopeType::CLASS_SCOPE) {
-          $fb = (new MethodConsumer($this->tq, $this->scopeAliases))
-            ->getBuilder();
+          $fb = (new MethodConsumer(
+            $this->tq,
+            $this->namespace,
+            $this->scopeAliases,
+          ))->getBuilder();
         } else {
-          $fb = (new FunctionConsumer($this->tq, $this->scopeAliases))
-            ->getBuilder();
+          $fb = (new FunctionConsumer(
+            $this->tq,
+            $this->namespace,
+            $this->scopeAliases,
+          ))->getBuilder();
         }
 
         if (!$fb) {
@@ -271,7 +292,11 @@ class ScopeConsumer extends Consumer {
         return;
       case DefinitionType::CONST_DEF:
         $builder->addConstant(
-          (new ConstantConsumer($this->tq, $this->scopeAliases))
+          (new ConstantConsumer(
+            $this->tq,
+            $this->namespace,
+            $this->scopeAliases,
+          ))
           ->getBuilder()
           ->setDocComment($docblock)
         );
