@@ -3,7 +3,8 @@
 namespace FredEmmott\DefinitionFinder;
 
 class MethodConsumer extends FunctionAbstractConsumer<ScannedMethod> {
-  protected static function ConstructBuilder(
+  <<__Override>>
+  protected function constructBuilder(
     string $name,
   ): ScannedMethodBuilder {
     return new ScannedMethodBuilder($name);

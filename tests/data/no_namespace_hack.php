@@ -13,6 +13,9 @@ class SimpleClass {
   }
 }
 
+class SimpleChildClass extends SimpleClass {
+}
+
 class GenericClass<Tk, Tv> {
   const NOT_A_GLOBAL_CONSTANT = 42;
   const int ALSO_NOT_A_GLOBAL_CONSTANT = 42;

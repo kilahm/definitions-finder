@@ -117,7 +117,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
       $function->getParameters()->map($x ==> $x->getName()),
     );
     $this->assertEquals(
-      Vector { new ScannedTypehint('\Iterator', Vector { }, false) },
+      Vector { new ScannedTypehint('Iterator', Vector { }, false) },
       $function->getParameters()->map($x ==> $x->getTypehint()),
     );
   }
@@ -133,7 +133,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase {
       $function->getParameters()->map($x ==> $x->getName()),
     );
     $this->assertEquals(
-      Vector { new ScannedTypehint('\Foo\Bar', Vector { }, false) },
+      Vector { new ScannedTypehint('Foo\Bar', Vector { }, false) },
       $function->getParameters()->map($x ==> $x->getTypehint()),
     );
   }

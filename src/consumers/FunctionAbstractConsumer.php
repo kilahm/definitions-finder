@@ -7,7 +7,7 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
 
   private ?string $name;
 
-  abstract protected static function ConstructBuilder(
+  abstract protected function constructBuilder(
     string $name,
   ): ScannedFunctionAbstractBuilder<T>;
 
@@ -42,7 +42,8 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
     $this->name = $t;
     $name = $t;
 
-    $builder = static::ConstructBuilder($name)
+    $builder = $this
+      ->constructBuilder($name)
       ->setByRefReturn($by_ref_return);
 
     list($_, $ttype) = $tq->peek();

@@ -48,7 +48,7 @@ final class ConstantConsumer extends Consumer {
           $value .= $nnv;
         }
         $builder = new ScannedConstantBuilder(
-          nullthrows($name),
+          $this->normalizeName(nullthrows($name)),
           $value,
           $typehint,
         );
