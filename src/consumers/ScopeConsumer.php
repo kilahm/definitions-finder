@@ -318,10 +318,6 @@ class ScopeConsumer extends Consumer {
         }
         return;
       case DefinitionType::CONST_DEF:
-        $namespace = $this->scopeType === ScopeType::CLASS_SCOPE
-          ? null
-          : $this->namespace;
-
         list($next, $next_token) = $this->tq->peek();
         if ($next_token === DefinitionType::TYPE_DEF) {
           if ($abstractness === null) {
@@ -330,7 +326,7 @@ class ScopeConsumer extends Consumer {
           $builder->addTypeConstant(
             (new TypeConstantConsumer(
               $this->tq,
-              $namespace,
+              $this->namespace,
               $this->scopeAliases,
               $abstractness,
             ))
@@ -339,6 +335,11 @@ class ScopeConsumer extends Consumer {
           );
           return;
         }
+        
+        $namespace = $this->scopeType === ScopeType::CLASS_SCOPE
+          ? null
+          : $this->namespace;
+
         $builder->addConstant(
           (new ConstantConsumer(
             $this->tq,
