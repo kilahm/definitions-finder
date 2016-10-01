@@ -4,13 +4,13 @@ namespace FredEmmott\DefinitionFinder;
 
 class ScannedNamespace extends ScannedBase {
   public function __construct(
-    SourcePosition $position,
     string $name,
+    self::TContext $context,
     private ScannedScope $contents,
   ) {
     parent::__construct(
-      $position,
       $name,
+      $context,
       /* attributes = */ Map { },
       /* docblock = */ null,
     );

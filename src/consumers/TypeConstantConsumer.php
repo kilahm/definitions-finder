@@ -23,6 +23,7 @@ final class TypeConstantConsumer extends Consumer {
     $this->checkForTypeToken();
     return new ScannedTypeConstantBuilder(
       $this->consumeName(),
+      $this->getBuilderContext(),
       $this->consumeValue(),
       $this->abstractness,
     );

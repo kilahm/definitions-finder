@@ -3,8 +3,10 @@
 namespace FredEmmott\DefinitionFinder;
 
 class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
-  public function __construct() {
-    parent::__construct('__SCOPE__');
+  public function __construct(
+    self::TContext $context,
+  ) {
+    parent::__construct('__SCOPE__', $context);
   }
 
   private Vector<ScannedClassBuilder> $classBuilders = Vector { };
@@ -70,13 +72,10 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
   }
 
   public function build(): ScannedScope {
-    $pos = nullthrows($this->position);
-
     $classes = Vector { };
     $interfaces= Vector { };
     $traits = Vector { };
     foreach ($this->classBuilders as $b) {
-      $b->setPosition($pos);
       switch ($b->getType()) {
         case ClassDefinitionType::CLASS_DEF:
           $classes[] = $b->build(ScannedBasicClass::class);
@@ -114,7 +113,7 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
     }
 
     return new ScannedScope(
-      nullthrows($this->position),
+      $this->getDefinitionContext(),
       $classes,
       $interfaces,
       $traits,
@@ -133,9 +132,6 @@ class ScannedScopeBuilder extends ScannedSingleTypeBuilder<ScannedScope> {
   private function buildAll<T>(
     \ConstVector<ScannedSingleTypeBuilder<T>> $v,
   ): Vector<T> {
-    return $v->map($b ==> $b
-      ->setPosition(nullthrows($this->position))
-      ->build()
-    )->toVector();
+    return $v->map($b ==> $b->build())->toVector();
   }
 }

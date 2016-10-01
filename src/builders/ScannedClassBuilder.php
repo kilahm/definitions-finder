@@ -18,10 +18,11 @@ final class ScannedClassBuilder extends ScannedBaseBuilder {
   }
 
   public function __construct(
-    private ClassDefinitionType $type,
     string $name,
+    self::TContext $context,
+    private ClassDefinitionType $type,
   ) {
-    parent::__construct($name);
+    parent::__construct($name, $context);
   }
 
   public function setContents(ScannedScopeBuilder $scope): this {
@@ -62,7 +63,6 @@ final class ScannedClassBuilder extends ScannedBaseBuilder {
     );
 
     $scope = nullthrows($this->scopeBuilder)
-      ->setPosition(nullthrows($this->position))
       ->build();
 
     $methods = $scope->getMethods();
@@ -75,8 +75,8 @@ final class ScannedClassBuilder extends ScannedBaseBuilder {
             // Not using the builder as we should have all the data up front,
             // and I want the typechecker to notice if we're missing something
             $properties[] = new ScannedProperty(
-              $param->getPosition(),
               $param->getName(),
+              $param->getContext(),
               $param->getAttributes(),
               $param->getDocComment(),
               $param->getTypehint(),
@@ -90,8 +90,8 @@ final class ScannedClassBuilder extends ScannedBaseBuilder {
     }
 
     return new $what(
-      nullthrows($this->position),
       $this->name,
+      $this->getDefinitionContext(),
       nullthrows($this->attributes),
       $this->docblock,
       $methods,
