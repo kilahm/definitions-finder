@@ -75,8 +75,7 @@ class GenericsConsumer extends Consumer {
         $this->consumeWhitespace();
         $constraint = (new TypehintConsumer(
           $tq,
-          $this->namespace,
-          $this->aliases,
+          $this->context,
         ))->getTypehint()->getTypeText();
         continue;
       }
@@ -86,8 +85,7 @@ class GenericsConsumer extends Consumer {
         $this->consumeWhitespace();
         $constraint = (new TypehintConsumer(
           $tq,
-          $this->namespace,
-          $this->aliases,
+          $this->context,
         ))->getTypehint()->getTypeText();
         continue;
       }

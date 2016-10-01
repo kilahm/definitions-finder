@@ -49,11 +49,8 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
     list($_, $ttype) = $tq->peek();
     $generics = Vector { };
     if ($ttype === T_TYPELIST_LT) {
-      $generics = (new GenericsConsumer(
-        $tq,
-        $this->namespace,
-        $this->aliases,
-      ))->getGenerics();
+      $generics = (new GenericsConsumer($this->tq, $this->context))
+        ->getGenerics();
     }
     $builder->setGenerics($generics);
     $this->consumeParameterList($builder);
@@ -65,8 +62,7 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
       $this->consumeWhitespace();
       $builder->setReturnType((new TypehintConsumer(
         $this->tq,
-        $this->namespace,
-        $this->aliases,
+        $this->context,
       ))->getTypehint());
     }
     return $builder;
@@ -160,8 +156,7 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
       if ($ttype === T_SL) {
         $attrs = (new UserAttributesConsumer(
           $this->tq,
-          $this->namespace,
-          $this->aliases,
+          $this->context,
         ))->getUserAttributes();
         continue;
       }
@@ -180,8 +175,7 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
       $tq->unshift($t, $ttype);
       $param_type = (new TypehintConsumer(
         $this->tq,
-        $this->namespace,
-        $this->aliases,
+        $this->context,
       ))->getTypehint();
     }
   }

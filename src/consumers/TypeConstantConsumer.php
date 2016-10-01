@@ -13,11 +13,10 @@ final class TypeConstantConsumer extends Consumer {
 
   public function __construct(
     TokenQueue $tq,
-    ?string $namespace,
-    \ConstMap<string, string> $aliases,
+    self::TContext $context,
     private AbstractnessToken $abstractness,
   ) {
-    parent::__construct($tq, $namespace, $aliases);
+    parent::__construct($tq, $context);
   }
 
   public function getBuilder(): ScannedTypeConstantBuilder {
@@ -64,8 +63,7 @@ final class TypeConstantConsumer extends Consumer {
       $this->consumeWhitespace();
       return (new TypehintConsumer(
         $this->tq,
-        $this->namespace,
-        $this->aliases,
+        $this->context,
       ))->getTypehint();
     }
 
@@ -78,8 +76,7 @@ final class TypeConstantConsumer extends Consumer {
       $this->consumeWhitespace();
       return (new TypehintConsumer(
         $this->tq,
-        $this->namespace,
-        $this->aliases,
+        $this->context,
       ))->getTypehint();
     }
 

@@ -3,7 +3,7 @@
 
 namespace FredEmmott\DefinitionFinder;
 
-class NamespaceConsumer extends Consumer {
+final class NamespaceConsumer extends Consumer {
   public function getBuilder(): ScannedNamespaceBuilder {
     $parts = [];
     do {
@@ -23,15 +23,19 @@ class NamespaceConsumer extends Consumer {
       );
     } while ($this->tq->haveTokens());
 
-    $ns = $parts ? implode('\\', $parts) : '';
+    // empty $parts is valid inside HHVM's systemlib: namespace { } is used
+    // in files that also contain HH\ or __SystemLib\
+
+    $ns = implode("\\", $parts);
+    $context = $this->context;
+    $context['namespace'] = $ns;
 
     $builder = (new ScannedNamespaceBuilder($ns))
       ->setContents(
         (new ScopeConsumer(
           $this->tq,
+          $context,
           ScopeType::NAMESPACE_SCOPE,
-          $ns,
-          /* aliases = */ Map{},
         ))->getBuilder()
     );
     return $builder;
