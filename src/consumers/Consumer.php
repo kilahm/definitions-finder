@@ -36,12 +36,8 @@ abstract class Consumer {
   }
 
   private static ?ImmSet<string> $autoImportTypes;
-  final private static function getAutoImportTypes(): ImmSet<string> {
-    $types = self::$autoImportTypes;
-    if ($types !== null) {
-      return $types;
-    }
 
+  final private function getAutoImportTypes(): ImmSet<string> {
     $scalars = ImmSet {
       'mixed',
       'void',
@@ -56,6 +52,10 @@ abstract class Consumer {
       'arraykey',
       'array',
     };
+
+    if ($this->context['sourceType'] === SourceType::PHP) {
+      return $scalars;
+    }
 
     /* class and typedef list taken from typechecker source:
      *   hhvm/hphp/hack/src/parsing/namespaces.ml
@@ -219,7 +219,7 @@ abstract class Consumer {
     NameNormalizationMode $mode,
   ): string {
     if ($mode === NameNormalizationMode::REFERENCE) {
-      $autoimport = self::getAutoImportTypes();
+      $autoimport = $this->getAutoImportTypes();
       if ($autoimport->contains($name)) {
         return $name;
       }
