@@ -53,7 +53,7 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
         ->getGenerics();
     }
     $builder->setGenerics($generics);
-    $this->consumeParameterList($builder);
+    $this->consumeParameterList($builder, $generics);
 
     $this->consumeWhitespace();
     list($t, $ttype) = $tq->peek();
@@ -62,7 +62,7 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
       $this->consumeWhitespace();
       $builder->setReturnType((new TypehintConsumer(
         $this->tq,
-        $this->context,
+        $this->getContextWithGenerics($generics),
       ))->getTypehint());
     }
     return $builder;
@@ -70,6 +70,7 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
 
   private function consumeParameterList(
     ScannedFunctionAbstractBuilder<T> $builder,
+    \ConstVector<ScannedGeneric> $generics,
   ): void {
     $this->consumeWhitespace();
     $tq = $this->tq;
@@ -175,7 +176,7 @@ abstract class FunctionAbstractConsumer<T as ScannedFunctionAbstract>
       $tq->unshift($t, $ttype);
       $param_type = (new TypehintConsumer(
         $this->tq,
-        $this->context,
+        $this->getContextWithGenerics($generics),
       ))->getTypehint();
     }
   }

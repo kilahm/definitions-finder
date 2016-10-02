@@ -18,6 +18,7 @@ final class ClassConsumer extends Consumer {
   }
 
   public function getBuilder(): ScannedClassBuilder {
+    $generics = Vector { };
     list($v, $t) = $this->tq->shift();
 
     if ($t === T_STRING || StringishTokens::isValid($t)) {
@@ -45,10 +46,9 @@ final class ClassConsumer extends Consumer {
 
     list($_, $ttype) = $this->tq->peek();
     if ($ttype == T_TYPELIST_LT) {
-      $builder->setGenericTypes(
-        (new GenericsConsumer($this->tq, $this->context))
-          ->getGenerics(),
-      );
+      $generics = (new GenericsConsumer($this->tq, $this->context))
+        ->getGenerics();
+      $builder->setGenericTypes($generics);
     }
 
     while ($this->tq->haveTokens()) {
@@ -86,7 +86,7 @@ final class ClassConsumer extends Consumer {
       ->setContents(
         (new ScopeConsumer(
           $this->tq,
-          $this->context,
+          $this->getContextWithGenerics($generics),
           ScopeType::CLASS_SCOPE,
         ))
         ->getBuilder()
